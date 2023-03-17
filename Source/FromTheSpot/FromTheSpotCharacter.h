@@ -5,26 +5,31 @@
 #include "GameFramework/Character.h"
 #include "FromTheSpotCharacter.generated.h"
 
+class USpringArmComponent;
+class UCameraComponent;
+
 UCLASS(config=Game)
 class AFromTheSpotCharacter : public ACharacter
 {
 	GENERATED_BODY()
-
-	/** Camera boom positioning the camera behind the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* CameraBoom;
-
-	/** Follow camera */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* FollowCamera;
 	
 public:
+	// Sets default values for this actor's properties
 	AFromTheSpotCharacter();
 	
-	/** Returns CameraBoom subobject **/
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	// Returns CameraBoom subobject
+	USpringArmComponent* GetCameraBoom() const;
 	
-	/** Returns FollowCamera subobject **/
-	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	// Returns FollowCamera subobject
+	UCameraComponent* GetFollowCamera() const;
+
+protected:
+	// Camera boom positioning the camera behind the character
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	USpringArmComponent* CameraBoom;
+
+	// Follow camera 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* FollowCamera;
 };
 
