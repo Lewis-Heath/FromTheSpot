@@ -11,7 +11,7 @@ AFootball::AFootball()
 
 	// Create the root
 	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
-
+	
 	if (!IsValid(Root))
 	{
 		return;
@@ -43,7 +43,7 @@ void AFootball::Shoot(const FVector& TargetLocation, const float TimingMultiplie
 	{
 		return;
 	}
-
+	
 	// Calculate the final power multiplier
 	const float FinalPowerMultiplier = TimingMultiplier * PowerMultiplier;
 
