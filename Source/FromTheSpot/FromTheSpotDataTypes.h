@@ -26,6 +26,67 @@ enum class EGameModeType : uint8
 	TUTORIAL,
 };
 
+UENUM(BlueprintType)
+enum class ETeamType : uint8
+{
+	NONE,
+	GREY,
+	WHITE,
+	MERSYSIDE_RED,
+	LONDON_BLUE,
+	DORTMUND_YELLOW,
+	CELTIC_GREEN,
+	MIAMI_PINK,
+	TIGER_ORANGE,
+};
+
+UENUM(BlueprintType)
+enum class EBootsType : uint8
+{
+	NONE,
+	GREY,
+	WHITE,
+	BLUE,
+	GREEN,
+	RED,
+	YELLOW,
+};
+
+UENUM(BlueprintType)
+enum class EGlovesType : uint8
+{
+	NONE,
+	GREY,
+	WHITE,
+	BLUE,
+	GREEN,
+	RED,
+	YELLOW,
+};
+
+UENUM(BlueprintType)
+enum class EBallType : uint8
+{
+	NONE,
+	BLACK,
+	WHITE,
+	BLUE,
+	GREEN,
+	PINK,
+	RED,
+	YELLOW,
+};
+
+UENUM(BlueprintType)
+enum class EDifficulty : uint8
+{
+	NONE,
+	EASY,
+	MEDIUM,
+	HARD,
+	IMPOSSIBLE,
+};
+
 USTRUCT(BlueprintType)
 struct FShopItemData
 {
@@ -49,5 +110,91 @@ struct FShopItemData
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bOwned = false;
 };
+
+USTRUCT(BlueprintType)
+struct FTeamData
+{
+	GENERATED_USTRUCT_BODY()
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString Name = "";
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UTexture2D* Badge = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	ETeamType TeamType = ETeamType::NONE;
+};
+
+USTRUCT(BlueprintType)
+struct FBootsData
+{
+	GENERATED_USTRUCT_BODY()
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UTexture2D* Image = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EBootsType BootsType = EBootsType::NONE;
+};
+
+USTRUCT(BlueprintType)
+struct FGlovesData
+{
+	GENERATED_USTRUCT_BODY()
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UTexture2D* Image = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EGlovesType GlovesType = EGlovesType::NONE;
+};
+
+USTRUCT(BlueprintType)
+struct FBallData
+{
+	GENERATED_USTRUCT_BODY()
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UTexture2D* Image = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EBallType BallType = EBallType::NONE;
+};
+
+USTRUCT(BlueprintType)
+struct FMatchData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadWrite)
+	ETeamType Player1Team = ETeamType::GREY;
+
+	UPROPERTY(BlueprintReadWrite)
+	ETeamType Player2Team = ETeamType::WHITE;
+
+	UPROPERTY(BlueprintReadWrite)
+	EDifficulty Player1Difficulty = EDifficulty::EASY;
+
+	UPROPERTY(BlueprintReadWrite)
+	EDifficulty Player2Difficulty = EDifficulty::EASY;
+
+	UPROPERTY(BlueprintReadWrite)
+	EBootsType Player1Boots = EBootsType::GREY;
+
+	UPROPERTY(BlueprintReadWrite)
+	EBootsType Player2Boots = EBootsType::WHITE;
+
+	UPROPERTY(BlueprintReadWrite)
+	EGlovesType Player1Gloves = EGlovesType::GREY;
+
+	UPROPERTY(BlueprintReadWrite)
+	EGlovesType Player2Gloves = EGlovesType::WHITE;
+
+	UPROPERTY(BlueprintReadWrite)
+	EBallType MatchBall = EBallType::WHITE;
+};
+
+
 
 

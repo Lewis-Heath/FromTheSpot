@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Written by Lewis Heath.
 
 #pragma once
 #include "CoreMinimal.h"
