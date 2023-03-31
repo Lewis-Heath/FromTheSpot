@@ -87,6 +87,22 @@ enum class EDifficulty : uint8
 	IMPOSSIBLE,
 };
 
+UENUM(BlueprintType)
+enum class EMatchState : uint8
+{
+	NONE,
+	COIN_FLIP,
+	ATTACK,
+};
+
+UENUM(BlueprintType)
+enum class ECoinFlipResult : uint8
+{
+	NONE,
+	HEADS,
+	TAILS,
+};
+
 USTRUCT(BlueprintType)
 struct FShopItemData
 {
@@ -193,6 +209,23 @@ struct FMatchData
 
 	UPROPERTY(BlueprintReadWrite)
 	EBallType MatchBall = EBallType::WHITE;
+};
+
+class UFromTheSpotMatchStateBase;
+
+USTRUCT(BlueprintType)
+struct FMatchStateData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UFromTheSpotMatchStateBase* ClassReference = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	EMatchState Type = EMatchState::NONE;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	float Time = -1.0f;
 };
 
 
