@@ -23,3 +23,23 @@ void AFromTheSpotBaseHUD::CoinFlipDecided(const bool bPlayer1Heads, const bool b
 
 	MatchHUD->BP_CoinFlipDecided(bPlayer1Heads, bPlayer2Heads, CoinFlipResult, StartingPlayerName);
 }
+
+void AFromTheSpotBaseHUD::FlipPlayerNames()
+{
+	if (!IsValid(MatchHUD))
+	{
+		return;
+	}
+
+	MatchHUD->BP_FlipPlayerNames();
+}
+
+void AFromTheSpotBaseHUD::UpdateMatchData(const FPlayerData& PlayerAData, const FPlayerData& PlayerBData)
+{
+	if (!IsValid(MatchHUD))
+	{
+		return;
+	}
+
+	MatchHUD->BP_UpdateMatchData(PlayerAData, PlayerBData);
+}

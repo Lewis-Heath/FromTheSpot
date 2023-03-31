@@ -31,10 +31,16 @@ public:
 
 	virtual void CoinFlipDecided(const ECoinFlipResult CoinFlipResult, bool bFlipPlayers);
 
+	virtual void UpdateMatchData(const FPlayerData& NewPlayerAData, const FPlayerData& NewPlayerBData);
+
 	// HUD
 	virtual void HUDMatchStateStarted(const EMatchState NewMatchState);
 	
 	virtual void HUDCoinFlipDecided(const bool bPlayer1Heads, const bool bPlayer2Heads, const ECoinFlipResult CoinFlipResult, const FString& StartingPlayerName);
+
+	virtual void HUDFlipPlayerNames();
+
+	virtual void HUDUpdateMatchData(const FPlayerData& NewPlayerAData, const FPlayerData& NewPlayerBData);
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -48,6 +54,15 @@ protected:
 	FMatchStateData CurrentMatchStateInfo = FMatchStateData();
 
 	// Match
-	FString PlayerAName = "";
-	FString PlayerBName = "";
+	FPlayerData PlayerAData = FPlayerData();
+	FPlayerData PlayerBData = FPlayerData();
 };
+
+inline void AFromTheSpotGameModeBase::UpdateMatchData(const FPlayerData& NewPlayerAData,
+	const FPlayerData& NewPlayerBData)
+{
+	PlayerAData = NewPlayerAData;
+	PlayerBData = NewPlayerBData;
+
+	HUDUpdateMatchData(PlayerAData, PlayerBData);
+}

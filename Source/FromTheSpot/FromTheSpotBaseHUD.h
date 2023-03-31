@@ -20,6 +20,12 @@ public:
 	//
 	virtual void CoinFlipDecided(const bool bPlayer1Heads, const bool bPlayer2Heads, const ECoinFlipResult CoinFlipResult, const FString& StartingPlayerName);
 
+	//
+	virtual void FlipPlayerNames();
+	
+	//
+	virtual void UpdateMatchData(const FPlayerData& PlayerAData, const FPlayerData& PlayerBData);
+
 protected:
 	//
 	UPROPERTY(BlueprintReadWrite)

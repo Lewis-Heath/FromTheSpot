@@ -184,10 +184,10 @@ struct FMatchData
 	GENERATED_BODY()
 
 	UPROPERTY(BlueprintReadWrite)
-	ETeamType Player1Team = ETeamType::GREY;
+	FTeamData Player1TeamData = FTeamData();
 
 	UPROPERTY(BlueprintReadWrite)
-	ETeamType Player2Team = ETeamType::WHITE;
+	FTeamData Player2TeamData = FTeamData();
 
 	UPROPERTY(BlueprintReadWrite)
 	EDifficulty Player1Difficulty = EDifficulty::EASY;
@@ -226,6 +226,24 @@ struct FMatchStateData
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	float Time = -1.0f;
+};
+
+USTRUCT(BlueprintType)
+struct FPlayerData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	FString Name = "";
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int Score = 0;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	FString TeamName = "";
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UTexture2D* TeamBadge = nullptr;
 };
 
 

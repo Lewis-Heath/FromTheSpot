@@ -17,4 +17,10 @@ public:
 	
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_CoinFlipDecided(const bool bPlayer1Heads, const bool bPlayer2Heads, const ECoinFlipResult CoinFlipResult, const FString& StartingPlayerName);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_FlipPlayerNames();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_UpdateMatchData(const FPlayerData& PlayerAData, const FPlayerData& PlayerBData);
 };

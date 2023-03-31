@@ -3,6 +3,7 @@
 #include "FromTheSpotGameModeBase.h"
 
 #include "FromTheSpotBaseHUD.h"
+#include "FromTheSpotGameInstance.h"
 #include "FromTheSpotMatchStateAttack.h"
 #include "FromTheSpotMatchStateCoinFlip.h"
 #include "GameFramework/HUD.h"
@@ -36,7 +37,7 @@ void AFromTheSpotGameModeBase::BeginPlay()
 	{
 		return;
 	}
-
+	
 	for (FMatchStateData& MatchStateData : MatchStateInfo)
 	{
 		UFromTheSpotMatchStateBase* CreatedMatchState = nullptr;
@@ -232,8 +233,8 @@ void AFromTheSpotGameModeBase::CoinFlipDecided(const ECoinFlipResult CoinFlipRes
 		}
 	}
 
-	PlayerAName = StartingPlayerName;
-	PlayerBName = SecondPlayerName;
+	PlayerAData.Name = StartingPlayerName;
+	PlayerBData.Name = SecondPlayerName;
 }
 
 void AFromTheSpotGameModeBase::HUDMatchStateStarted(const EMatchState NewMatchState)
@@ -255,4 +256,24 @@ void AFromTheSpotGameModeBase::HUDCoinFlipDecided(const bool bPlayer1Heads, cons
 	}
 
 	PlayerMatchHUD->CoinFlipDecided(bPlayer1Heads, bPlayer2Heads, CoinFlipResult, StartingPlayerName);
+}
+
+void AFromTheSpotGameModeBase::HUDFlipPlayerNames()
+{
+	if (!IsValid(PlayerMatchHUD))
+	{
+		return;
+	}
+
+	PlayerMatchHUD->FlipPlayerNames();
+}
+
+void AFromTheSpotGameModeBase::HUDUpdateMatchData(const FPlayerData& NewPlayerAData, const FPlayerData& NewPlayerBData)
+{
+	if (!IsValid(PlayerMatchHUD))
+	{
+		return;
+	}
+
+	PlayerMatchHUD->UpdateMatchData(NewPlayerAData, NewPlayerBData);
 }
