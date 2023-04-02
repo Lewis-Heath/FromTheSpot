@@ -2,6 +2,7 @@
 
 #pragma once
 #include "CoreMinimal.h"
+#include "FromTheSpotDataTypes.h"
 #include "GameFramework/Character.h"
 #include "FromTheSpotCharacter.generated.h"
 
@@ -16,6 +17,10 @@ class AFromTheSpotCharacter : public ACharacter
 public:
 	// Sets default values for this actor's properties
 	AFromTheSpotCharacter();
+
+	//
+	UFUNCTION(BlueprintCallable)
+	void SetCurrentTurn(const ETurnType NewTurnType);
 	
 	// Returns CameraBoom subobject
 	USpringArmComponent* GetCameraBoom() const;
@@ -25,12 +30,15 @@ public:
 
 protected:
 	//
+	UFUNCTION(BlueprintCallable)
 	void TouchPressed(const FVector& ScreenLocation);
 
 	//
+	UFUNCTION(BlueprintCallable)
 	void TouchReleased(const FVector& ScreenLocation);
 
 	//
+	UFUNCTION(BlueprintCallable)
 	void TouchMoved(const FVector& ScreenLocation);
 	
 	// Camera boom positioning the camera behind the character
@@ -49,5 +57,17 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool bTurnTaken = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	ETurnType CurrentTurn = ETurnType::NONE;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	float TimingMultiplier = 0.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	FVector StartLocation = FVector::ZeroVector;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	FVector PreviousLocation = FVector::ZeroVector;
 };
 

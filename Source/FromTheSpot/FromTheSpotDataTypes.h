@@ -103,6 +103,14 @@ enum class ECoinFlipResult : uint8
 	TAILS,
 };
 
+UENUM(BlueprintType)
+enum class ETurnType : uint8
+{
+	NONE,
+	ATTACK,
+	DEFEND,
+};
+
 USTRUCT(BlueprintType)
 struct FShopItemData
 {

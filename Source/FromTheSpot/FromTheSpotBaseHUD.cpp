@@ -43,3 +43,23 @@ void AFromTheSpotBaseHUD::UpdateMatchData(const FPlayerData& PlayerAData, const 
 
 	MatchHUD->BP_UpdateMatchData(PlayerAData, PlayerBData);
 }
+
+void AFromTheSpotBaseHUD::FreezeIndicator(bool bFreeze)
+{
+	if (!IsValid(MatchHUD))
+	{
+		return;
+	}
+
+	MatchHUD->BP_FreezeIndicator(bFreeze);
+}
+
+float AFromTheSpotBaseHUD::GetTimingMultiplier() const
+{
+	if (!IsValid(MatchHUD))
+	{
+		return 0.0f;
+	}
+
+	return MatchHUD->GetTimingMultiplier();
+}

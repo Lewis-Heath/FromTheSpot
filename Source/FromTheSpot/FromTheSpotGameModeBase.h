@@ -33,6 +33,9 @@ public:
 
 	virtual void UpdateMatchData(const FPlayerData& NewPlayerAData, const FPlayerData& NewPlayerBData);
 
+	UFUNCTION(BlueprintCallable)
+	virtual void SetAttackInformation(const FVector NewShotLocation, const float NewTimingMultiplier);
+
 	// HUD
 	virtual void HUDMatchStateStarted(const EMatchState NewMatchState);
 	
@@ -56,6 +59,9 @@ protected:
 	// Match
 	FPlayerData PlayerAData = FPlayerData();
 	FPlayerData PlayerBData = FPlayerData();
+
+	FVector ShotLocation = FVector::ZeroVector;
+	float TimingMultiplier = 0.0f;
 };
 
 inline void AFromTheSpotGameModeBase::UpdateMatchData(const FPlayerData& NewPlayerAData,

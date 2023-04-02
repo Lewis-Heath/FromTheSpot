@@ -23,4 +23,13 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_UpdateMatchData(const FPlayerData& PlayerAData, const FPlayerData& PlayerBData);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_FreezeIndicator(bool bFreeze);
+
+	float GetTimingMultiplier() const;
+
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	float TimingMultiplier = 0.0f;
 };

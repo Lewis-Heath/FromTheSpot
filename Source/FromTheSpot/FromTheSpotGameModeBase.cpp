@@ -237,6 +237,12 @@ void AFromTheSpotGameModeBase::CoinFlipDecided(const ECoinFlipResult CoinFlipRes
 	PlayerBData.Name = SecondPlayerName;
 }
 
+void AFromTheSpotGameModeBase::SetAttackInformation(const FVector NewShotLocation, const float NewTimingMultiplier)
+{
+	ShotLocation = NewShotLocation;
+	TimingMultiplier = NewTimingMultiplier;
+}
+
 void AFromTheSpotGameModeBase::HUDMatchStateStarted(const EMatchState NewMatchState)
 {
 	if (!IsValid(PlayerMatchHUD))

@@ -26,6 +26,12 @@ public:
 	//
 	virtual void UpdateMatchData(const FPlayerData& PlayerAData, const FPlayerData& PlayerBData);
 
+	//
+	virtual void FreezeIndicator(bool bFreeze);
+
+	//
+	virtual float GetTimingMultiplier() const;
+
 protected:
 	//
 	UPROPERTY(BlueprintReadWrite)
