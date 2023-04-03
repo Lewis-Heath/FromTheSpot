@@ -30,6 +30,9 @@ public:
 	virtual void FreezeIndicator(bool bFreeze);
 
 	//
+	virtual void PenaltyResult(const bool bScored, const FString& PlayerName);
+
+	//
 	virtual float GetTimingMultiplier() const;
 
 protected:

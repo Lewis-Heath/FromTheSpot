@@ -93,6 +93,8 @@ enum class EMatchState : uint8
 	NONE,
 	COIN_FLIP,
 	ATTACK,
+	DEFEND,
+	INTERACTION,
 };
 
 UENUM(BlueprintType)
@@ -241,7 +243,7 @@ struct FPlayerData
 {
 	GENERATED_BODY()
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	FString Name = "";
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
@@ -252,6 +254,9 @@ struct FPlayerData
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UTexture2D* TeamBadge = nullptr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	EDifficulty Difficulty = EDifficulty::NONE;
 };
 
 

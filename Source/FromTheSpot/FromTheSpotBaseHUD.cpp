@@ -54,6 +54,16 @@ void AFromTheSpotBaseHUD::FreezeIndicator(bool bFreeze)
 	MatchHUD->BP_FreezeIndicator(bFreeze);
 }
 
+void AFromTheSpotBaseHUD::PenaltyResult(const bool bScored, const FString& PlayerName)
+{
+	if (!IsValid(MatchHUD))
+	{
+		return;
+	}
+
+	MatchHUD->BP_PenaltyResult(bScored, PlayerName);
+}
+
 float AFromTheSpotBaseHUD::GetTimingMultiplier() const
 {
 	if (!IsValid(MatchHUD))

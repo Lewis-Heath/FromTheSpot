@@ -21,6 +21,14 @@ public:
 	//
 	UFUNCTION(BlueprintCallable)
 	void SetCurrentTurn(const ETurnType NewTurnType);
+
+	//
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void MatchStateStarted(const EMatchState NewMatchState);
+
+	//
+	UFUNCTION(BlueprintImplementableEvent)
+	void TakePenalty();
 	
 	// Returns CameraBoom subobject
 	USpringArmComponent* GetCameraBoom() const;

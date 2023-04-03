@@ -27,6 +27,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_FreezeIndicator(bool bFreeze);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_PenaltyResult(const bool bScored, const FString& PlayerName);
+
 	float GetTimingMultiplier() const;
 
 protected:

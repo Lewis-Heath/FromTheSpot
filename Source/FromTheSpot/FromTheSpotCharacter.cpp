@@ -6,6 +6,7 @@
 #include "FootballGoal.h"
 #include "FromTheSpotBaseHUD.h"
 #include "FromTheSpotGameModeBase.h"
+#include "Goalkeeper.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/HUD.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -28,6 +29,8 @@ AFromTheSpotCharacter::AFromTheSpotCharacter()
 void AFromTheSpotCharacter::SetCurrentTurn(const ETurnType NewTurnType)
 {
 	CurrentTurn = NewTurnType;
+	bTurnTaken = false;
+	bCorrectStart = false;
 }
 
 USpringArmComponent* AFromTheSpotCharacter::GetCameraBoom() const
@@ -45,6 +48,11 @@ void AFromTheSpotCharacter::TouchPressed(const FVector& ScreenLocation)
 	bFingerDown = true;
 
 	if (bTurnTaken)
+	{ 
+		return;
+	}
+
+	if (CurrentTurn == ETurnType::NONE)
 	{
 		return;
 	}
@@ -76,10 +84,6 @@ void AFromTheSpotCharacter::TouchPressed(const FVector& ScreenLocation)
 	
 	switch (CurrentTurn)
 	{
-		case ETurnType::NONE:
-		{
-			return;
-		}
 		case ETurnType::ATTACK:
 		{
 			AFootball* Football = Cast<AFootball>(HitActor);
@@ -91,8 +95,12 @@ void AFromTheSpotCharacter::TouchPressed(const FVector& ScreenLocation)
 		}
 		case ETurnType::DEFEND:
 		{
-			// do goalkeeper logic here
-			return;
+			AGoalkeeper* Goalkeeper = Cast<AGoalkeeper>(HitActor);
+			if (!IsValid(Goalkeeper))
+			{
+				return;
+			}
+			break;
 		}
 	}
 
@@ -120,7 +128,17 @@ void AFromTheSpotCharacter::TouchReleased(const FVector& ScreenLocation)
 {
 	bFingerDown = false;
 
+	if (bTurnTaken)
+	{
+		return;
+	}
+
 	if (!bCorrectStart)
+	{
+		return;
+	}
+
+	if (CurrentTurn == ETurnType::NONE)
 	{
 		return;
 	}
@@ -165,11 +183,23 @@ void AFromTheSpotCharacter::TouchReleased(const FVector& ScreenLocation)
 	AFootballGoal* FootballGoal = Cast<AFootballGoal>(HitActor);
 	if (!IsValid(FootballGoal))
 	{
-		// do goalkeeper logic here - check its a goalkeeper if attacking
+		bool bIncorrectFinish = true;
 		
-		PlayerMatchHUD->FreezeIndicator(false);
-		bCorrectStart = false;
-		return;
+		if (CurrentTurn == ETurnType::ATTACK)
+		{
+			AGoalkeeper* Goalkeeper = Cast<AGoalkeeper>(HitActor);
+			if (IsValid(Goalkeeper))
+			{
+				bIncorrectFinish = false;
+			}
+		}
+
+		if (bIncorrectFinish)
+		{
+			PlayerMatchHUD->FreezeIndicator(false);
+			bCorrectStart = false;
+			return;
+		}
 	}
 
 	AFromTheSpotGameModeBase* GameMode = Cast<AFromTheSpotGameModeBase>(UGameplayStatics::GetGameMode(this));
@@ -177,14 +207,38 @@ void AFromTheSpotCharacter::TouchReleased(const FVector& ScreenLocation)
 	{
 		return;
 	}
-
-	GameMode->SetAttackInformation(OutHitResult.ImpactPoint, PlayerMatchHUD->GetTimingMultiplier());
+	
+	PreviousLocation = FVector::ZeroVector;
 	bTurnTaken = true;
+
+	switch (CurrentTurn)
+	{
+		case ETurnType::ATTACK:
+		{
+			GameMode->SetAttackInformation(OutHitResult.ImpactPoint, PlayerMatchHUD->GetTimingMultiplier());
+			break;
+		}
+		case ETurnType::DEFEND:
+		{
+			GameMode->SetDefendInformation(OutHitResult.ImpactPoint);
+			break;
+		}
+	}
 }
 
 void AFromTheSpotCharacter::TouchMoved(const FVector& ScreenLocation)
 {
+	if (bTurnTaken)
+	{
+		return;
+	}
+	
 	if (!bCorrectStart || !bFingerDown)
+	{
+		return;
+	}
+
+	if (CurrentTurn == ETurnType::NONE)
 	{
 		return;
 	}

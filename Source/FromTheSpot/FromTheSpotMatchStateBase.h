@@ -28,6 +28,8 @@ public:
 
 	virtual float GetCurrentTimeInProgress() const;
 
+	virtual void ActivateRoundTimer(const bool bActive);
+
 protected:
 	UPROPERTY()
 	AFromTheSpotGameModeBase* GameModeReference = nullptr;
@@ -35,4 +37,6 @@ protected:
 	EMatchState MatchStateType = EMatchState::NONE;
 	float MaxTimeInProgress = -1.0f;
 	float CurrentTimeInProgress = 0.0f;
+
+	bool bTimerActive = true;
 };

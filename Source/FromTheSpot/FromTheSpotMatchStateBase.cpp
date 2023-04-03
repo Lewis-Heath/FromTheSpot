@@ -2,8 +2,6 @@
 
 #include "FromTheSpotMatchStateBase.h"
 
-#include "Kismet/KismetSystemLibrary.h"
-
 UFromTheSpotMatchStateBase::UFromTheSpotMatchStateBase()
 {
 	
@@ -11,18 +9,20 @@ UFromTheSpotMatchStateBase::UFromTheSpotMatchStateBase()
 
 void UFromTheSpotMatchStateBase::StartMatchState()
 {
-	//UKismetSystemLibrary::PrintString(GetWorld(), "Start Match State BASE", true, false, FColor::Green, 5.0f);
+	
 }
 
 void UFromTheSpotMatchStateBase::TickMatchState(const float DeltaTime)
 {
-	CurrentTimeInProgress += DeltaTime;
-	//UKismetSystemLibrary::PrintString(GetWorld(), "Tick BASE", true, false, FColor::Red, 0.0f);
+	if (bTimerActive)
+	{
+		CurrentTimeInProgress += DeltaTime;
+	}
 }
 
 void UFromTheSpotMatchStateBase::EndMatchState()
 {
-	//UKismetSystemLibrary::PrintString(GetWorld(), "End Match State BASE", true, false, FColor::Red, 5.0f);
+	
 }
 
 void UFromTheSpotMatchStateBase::SetGameModeReference(AFromTheSpotGameModeBase* NewGameModeReference)
@@ -43,4 +43,9 @@ float UFromTheSpotMatchStateBase::GetMaxTimeInProgress() const
 float UFromTheSpotMatchStateBase::GetCurrentTimeInProgress() const
 {
 	return CurrentTimeInProgress;
+}
+
+void UFromTheSpotMatchStateBase::ActivateRoundTimer(const bool bActive)
+{
+	bTimerActive = bActive;
 }

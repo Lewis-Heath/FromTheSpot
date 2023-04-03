@@ -8,6 +8,9 @@
 
 class UFromTheSpotMatchStateBase;
 class AFromTheSpotBaseHUD;
+class AFootball;
+class AFromTheSpotCharacter;
+class AGoalkeeper;
 
 UCLASS()
 class FROMTHESPOT_API AFromTheSpotGameModeBase : public AGameModeBase
@@ -36,6 +39,19 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void SetAttackInformation(const FVector NewShotLocation, const float NewTimingMultiplier);
 
+	UFUNCTION(BlueprintCallable)
+	virtual void SetDefendInformation(const FVector NewSaveLocation);
+
+	virtual void BlowWhistle();
+
+	virtual void TakePenalty();
+
+	UFUNCTION(BlueprintCallable)
+	virtual void GoalScored();
+
+	UFUNCTION(BlueprintCallable)
+	virtual void GoalMissed();
+
 	// HUD
 	virtual void HUDMatchStateStarted(const EMatchState NewMatchState);
 	
@@ -52,6 +68,15 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	AFromTheSpotBaseHUD* PlayerMatchHUD = nullptr;
 
+	UPROPERTY(BlueprintReadOnly)
+	AFootball* MatchBall = nullptr;
+
+	UPROPERTY(BlueprintReadOnly)
+	AFromTheSpotCharacter* MatchAttacker = nullptr;
+
+	UPROPERTY(BlueprintReadOnly)
+	AGoalkeeper* MatchGoalkeeper = nullptr;
+
 	int CurrentMatchStateIndex = 0;
 	
 	FMatchStateData CurrentMatchStateInfo = FMatchStateData();
@@ -60,15 +85,16 @@ protected:
 	FPlayerData PlayerAData = FPlayerData();
 	FPlayerData PlayerBData = FPlayerData();
 
+	FString AttackingPlayerName = "";
+
 	FVector ShotLocation = FVector::ZeroVector;
 	float TimingMultiplier = 0.0f;
+
+	FVector SaveLocation = FVector::ZeroVector;
+
+	FTimerHandle PenaltyMissedTimerHandle;
+
+	float MaxPenaltyShotTime = 5.0f;
+
+	bool bRoundDecided = false;
 };
-
-inline void AFromTheSpotGameModeBase::UpdateMatchData(const FPlayerData& NewPlayerAData,
-	const FPlayerData& NewPlayerBData)
-{
-	PlayerAData = NewPlayerAData;
-	PlayerBData = NewPlayerBData;
-
-	HUDUpdateMatchData(PlayerAData, PlayerBData);
-}

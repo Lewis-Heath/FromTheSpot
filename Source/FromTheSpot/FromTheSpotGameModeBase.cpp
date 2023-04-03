@@ -2,10 +2,15 @@
 
 #include "FromTheSpotGameModeBase.h"
 
+#include "Football.h"
 #include "FromTheSpotBaseHUD.h"
+#include "FromTheSpotCharacter.h"
 #include "FromTheSpotGameInstance.h"
 #include "FromTheSpotMatchStateAttack.h"
 #include "FromTheSpotMatchStateCoinFlip.h"
+#include "FromTheSpotMatchStateDefend.h"
+#include "FromTheSpotMatchStateInteraction.h"
+#include "Goalkeeper.h"
 #include "GameFramework/HUD.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -19,6 +24,48 @@ AFromTheSpotGameModeBase::AFromTheSpotGameModeBase()
 void AFromTheSpotGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	TArray<AActor*> FoundFootballs;
+	UGameplayStatics::GetAllActorsOfClass(this, AFootball::StaticClass(), FoundFootballs);
+
+	if (!FoundFootballs.IsValidIndex(0))
+	{
+		return;
+	}
+
+	MatchBall = Cast<AFootball>(FoundFootballs[0]);
+	if (!IsValid(MatchBall))
+	{
+		return;
+	}
+
+	TArray<AActor*> FoundAttackers;
+	UGameplayStatics::GetAllActorsOfClass(this, AFromTheSpotCharacter::StaticClass(), FoundAttackers);
+
+	if (!FoundAttackers.IsValidIndex(0))
+	{
+		return;
+	}
+
+	MatchAttacker = Cast<AFromTheSpotCharacter>(FoundAttackers[0]);
+	if (!IsValid(MatchAttacker))
+	{
+		return;
+	}
+
+	TArray<AActor*> FoundGoalkeepers;
+	UGameplayStatics::GetAllActorsOfClass(this, AGoalkeeper::StaticClass(), FoundGoalkeepers);
+
+	if (!FoundGoalkeepers.IsValidIndex(0))
+	{
+		return;
+	}
+
+	MatchGoalkeeper = Cast<AGoalkeeper>(FoundGoalkeepers[0]);
+	if (!IsValid(MatchGoalkeeper))
+	{
+		return;
+	}
 
 	const APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
 	if (!IsValid(PlayerController))
@@ -63,6 +110,28 @@ void AFromTheSpotGameModeBase::BeginPlay()
 					CreatedMatchState = AttackStateObject;
 				}
 					
+				break;
+			}
+
+			case EMatchState::DEFEND:
+			{
+				UFromTheSpotMatchStateDefend* DefendStateObject = NewObject<UFromTheSpotMatchStateDefend>(this);
+				if (IsValid(DefendStateObject))
+				{
+					CreatedMatchState = DefendStateObject;
+				}
+				
+				break;
+			}
+			
+			case EMatchState::INTERACTION:
+			{
+				UFromTheSpotMatchStateInteraction* InteractionStateObject = NewObject<UFromTheSpotMatchStateInteraction>(this);
+				if (IsValid(InteractionStateObject))
+				{
+					CreatedMatchState = InteractionStateObject;
+				}
+			
 				break;
 			}
 		}
@@ -199,20 +268,17 @@ void AFromTheSpotGameModeBase::CoinFlipDecided(const ECoinFlipResult CoinFlipRes
 	}
 
 	FString StartingPlayerName = "";
-	FString SecondPlayerName = "";
 	
 	if (bPlayer1Heads && !bPlayer2Heads)
 	{
 		if (CoinFlipResult == ECoinFlipResult::HEADS)
 		{
 			StartingPlayerName = "Player 1";
-			SecondPlayerName = "Player 2";
 			HUDCoinFlipDecided(bPlayer1Heads, bPlayer2Heads, CoinFlipResult, "Player 1");
 		}
 		else
 		{
 			StartingPlayerName = "Player 2";
-			SecondPlayerName = "Player 1";
 			HUDCoinFlipDecided(bPlayer1Heads, bPlayer2Heads, CoinFlipResult, "Player 2");
 		}
 	}
@@ -222,25 +288,132 @@ void AFromTheSpotGameModeBase::CoinFlipDecided(const ECoinFlipResult CoinFlipRes
 		if (CoinFlipResult == ECoinFlipResult::HEADS)
 		{
 			StartingPlayerName = "Player 2";
-			SecondPlayerName = "Player 1";
 			HUDCoinFlipDecided(bPlayer1Heads, bPlayer2Heads, CoinFlipResult, "Player 2");
 		}
 		else
 		{
 			StartingPlayerName = "Player 1";
-			SecondPlayerName = "Player 2";
 			HUDCoinFlipDecided(bPlayer1Heads, bPlayer2Heads, CoinFlipResult, "Player 1");
 		}
 	}
 
-	PlayerAData.Name = StartingPlayerName;
-	PlayerBData.Name = SecondPlayerName;
+	AttackingPlayerName = StartingPlayerName;
+
+	PlayerAData.Name = "Player 1";
+	PlayerBData.Name = "Player 2";
+}
+
+void AFromTheSpotGameModeBase::UpdateMatchData(const FPlayerData& NewPlayerAData,
+	const FPlayerData& NewPlayerBData)
+{
+	PlayerAData = NewPlayerAData;
+	PlayerBData = NewPlayerBData;
+
+	HUDUpdateMatchData(PlayerAData, PlayerBData);
 }
 
 void AFromTheSpotGameModeBase::SetAttackInformation(const FVector NewShotLocation, const float NewTimingMultiplier)
 {
 	ShotLocation = NewShotLocation;
 	TimingMultiplier = NewTimingMultiplier;
+
+	StartNextMatchState();
+}
+
+void AFromTheSpotGameModeBase::SetDefendInformation(const FVector NewSaveLocation)
+{
+	SaveLocation = NewSaveLocation;
+
+	StartNextMatchState();
+}
+
+void AFromTheSpotGameModeBase::BlowWhistle()
+{
+	if (!IsValid(MatchAttacker))
+	{
+		return;
+	}
+
+	MatchAttacker->TakePenalty();
+
+	// tell attacker to play animation too
+}
+
+void AFromTheSpotGameModeBase::TakePenalty()
+{
+	if (!IsValid(MatchBall))
+	{
+		return;
+	}
+
+	const UWorld* World = GetWorld();
+	if (!IsValid(World))
+	{
+		return;
+	}
+
+	MatchBall->Shoot(ShotLocation, TimingMultiplier);
+
+	World->GetTimerManager().SetTimer(PenaltyMissedTimerHandle, this, &AFromTheSpotGameModeBase::GoalMissed, MaxPenaltyShotTime);
+
+	// tell goalkeeper to dive
+}
+
+void AFromTheSpotGameModeBase::GoalScored()
+{
+	if (bRoundDecided)
+	{
+		return;
+	}
+	
+	UFromTheSpotMatchStateBase* CurrentMatchState = CurrentMatchStateInfo.ClassReference;
+	if (!IsValid(CurrentMatchState))
+	{
+		return;
+	}
+	
+	if (!IsValid(PlayerMatchHUD))
+	{
+		return;
+	}
+	
+	if (AttackingPlayerName == PlayerAData.Name)
+	{
+		PlayerAData.Score++;
+	}
+	else if (AttackingPlayerName == PlayerBData.Name)
+	{
+		PlayerBData.Score++;
+	}
+
+	PenaltyMissedTimerHandle.Invalidate();
+	PlayerMatchHUD->PenaltyResult(true, AttackingPlayerName);
+	CurrentMatchState->ActivateRoundTimer(true);
+	bRoundDecided = true;
+}
+
+void AFromTheSpotGameModeBase::GoalMissed()
+{
+	if (bRoundDecided)
+	{
+		return;
+	}
+	
+	UFromTheSpotMatchStateBase* CurrentMatchState = CurrentMatchStateInfo.ClassReference;
+	if (!IsValid(CurrentMatchState))
+	{
+		return;
+	}
+	
+	if (!IsValid(PlayerMatchHUD))
+	{
+		return;
+	}
+
+	PenaltyMissedTimerHandle.Invalidate();
+	PlayerMatchHUD->PenaltyResult(false, AttackingPlayerName);
+	CurrentMatchState->ActivateRoundTimer(true);
+	bRoundDecided = true;
 }
 
 void AFromTheSpotGameModeBase::HUDMatchStateStarted(const EMatchState NewMatchState)
