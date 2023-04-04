@@ -52,6 +52,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void GoalMissed();
 
+	virtual void CheckEndMatch();
+
+	virtual void FlipPlayerNames();
+
 	// HUD
 	virtual void HUDMatchStateStarted(const EMatchState NewMatchState);
 	
@@ -60,6 +64,8 @@ public:
 	virtual void HUDFlipPlayerNames();
 
 	virtual void HUDUpdateMatchData(const FPlayerData& NewPlayerAData, const FPlayerData& NewPlayerBData);
+
+	virtual void HUDClearScoreImages();
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -94,7 +100,9 @@ protected:
 
 	FTimerHandle PenaltyMissedTimerHandle;
 
-	float MaxPenaltyShotTime = 5.0f;
+	float MaxPenaltyShotTime = 3.0f;
 
 	bool bRoundDecided = false;
+
+	bool bSuddenDeath = false;
 };

@@ -73,3 +73,13 @@ float AFromTheSpotBaseHUD::GetTimingMultiplier() const
 
 	return MatchHUD->GetTimingMultiplier();
 }
+
+void AFromTheSpotBaseHUD::ClearScoreImages()
+{
+	if (!IsValid(MatchHUD))
+	{
+		return;
+	}
+
+	MatchHUD->BP_ClearScoreImages();
+}

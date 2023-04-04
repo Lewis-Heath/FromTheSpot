@@ -26,6 +26,11 @@ AFromTheSpotCharacter::AFromTheSpotCharacter()
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 }
 
+void AFromTheSpotCharacter::ResetToStart()
+{
+	
+}
+
 void AFromTheSpotCharacter::SetCurrentTurn(const ETurnType NewTurnType)
 {
 	CurrentTurn = NewTurnType;

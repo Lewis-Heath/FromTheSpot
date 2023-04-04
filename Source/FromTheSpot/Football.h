@@ -16,7 +16,7 @@ public:
 
 	// Resets the balls location to the starting location cached and also resets any acting physics
 	UFUNCTION(BlueprintCallable)
-	void ResetToSpot();
+	void ResetToStart();
 
 	// Shoots the ball based on the target location passed in
 	UFUNCTION(BlueprintCallable)

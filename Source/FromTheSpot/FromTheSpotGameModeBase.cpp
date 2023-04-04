@@ -10,6 +10,7 @@
 #include "FromTheSpotMatchStateCoinFlip.h"
 #include "FromTheSpotMatchStateDefend.h"
 #include "FromTheSpotMatchStateInteraction.h"
+#include "FromTheSpotMatchStateResults.h"
 #include "Goalkeeper.h"
 #include "GameFramework/HUD.h"
 #include "Kismet/GameplayStatics.h"
@@ -134,6 +135,17 @@ void AFromTheSpotGameModeBase::BeginPlay()
 			
 				break;
 			}
+
+			case EMatchState::RESULTS:
+			{
+				UFromTheSpotMatchStateResults* ResultsStateObject = NewObject<UFromTheSpotMatchStateResults>(this);
+				if (IsValid(ResultsStateObject))
+				{
+					CreatedMatchState = ResultsStateObject;
+				}
+		
+				break;
+			}
 		}
 
 		if (IsValid(CreatedMatchState))
@@ -180,6 +192,11 @@ void AFromTheSpotGameModeBase::StartNextMatchState()
 	if (!IsValid(CurrentMatchState))
 	{
 		return;
+	}
+
+	if (CurrentMatchStateInfo.Type == EMatchState::INTERACTION)
+	{
+		CheckEndMatch();
 	}
 	
 	CurrentMatchStateIndex++;
@@ -244,16 +261,8 @@ void AFromTheSpotGameModeBase::CheckEndCurrentMatchState()
 
 void AFromTheSpotGameModeBase::EndMatch()
 {
-	UFromTheSpotMatchStateBase* CurrentMatchState = CurrentMatchStateInfo.ClassReference;
-	if (!IsValid(CurrentMatchState))
-	{
-		return;
-	}
-
-	CurrentMatchState->EndMatchState();
-	CurrentMatchStateInfo = FMatchStateData();
-	
-	UKismetSystemLibrary::PrintString(GetWorld(), "MATCH ENDED", true, false, FColor::Red, 25.0f);
+	const FMatchStateData& ResultsMatchStateData = MatchStateInfo[MatchStateInfo.Num()-1];
+	StartMatchState(ResultsMatchStateData);
 }
 
 void AFromTheSpotGameModeBase::CoinFlipDecided(const ECoinFlipResult CoinFlipResult, bool bFlipPlayers)
@@ -379,14 +388,16 @@ void AFromTheSpotGameModeBase::GoalScored()
 	
 	if (AttackingPlayerName == PlayerAData.Name)
 	{
+		PlayerAData.PenaltiesTaken++;
 		PlayerAData.Score++;
 	}
 	else if (AttackingPlayerName == PlayerBData.Name)
 	{
+		PlayerBData.PenaltiesTaken++;
 		PlayerBData.Score++;
 	}
 
-	PenaltyMissedTimerHandle.Invalidate();
+	UKismetSystemLibrary::K2_ClearAndInvalidateTimerHandle(this, PenaltyMissedTimerHandle);
 	PlayerMatchHUD->PenaltyResult(true, AttackingPlayerName);
 	CurrentMatchState->ActivateRoundTimer(true);
 	bRoundDecided = true;
@@ -410,10 +421,107 @@ void AFromTheSpotGameModeBase::GoalMissed()
 		return;
 	}
 
-	PenaltyMissedTimerHandle.Invalidate();
+	if (AttackingPlayerName == PlayerAData.Name)
+	{
+		PlayerAData.PenaltiesTaken++;
+	}
+	else if (AttackingPlayerName == PlayerBData.Name)
+	{
+		PlayerBData.PenaltiesTaken++;
+	}
+
+	UKismetSystemLibrary::K2_ClearAndInvalidateTimerHandle(this, PenaltyMissedTimerHandle);
 	PlayerMatchHUD->PenaltyResult(false, AttackingPlayerName);
 	CurrentMatchState->ActivateRoundTimer(true);
 	bRoundDecided = true;
+}
+
+void AFromTheSpotGameModeBase::CheckEndMatch()
+{
+	bool bEndMatch = false;
+	
+	FPlayerData WinningPlayer = FPlayerData();
+	
+	const int PlayerAPenaltiesTaken = PlayerAData.PenaltiesTaken;
+	const int PlayerBPenaltiesTaken = PlayerBData.PenaltiesTaken;
+
+	if (!bSuddenDeath && PlayerAPenaltiesTaken == 5 && PlayerBPenaltiesTaken == 5)
+	{
+		bSuddenDeath = true;
+	}
+	
+	const int PlayerAScore = PlayerAData.Score;
+	const int PlayerBScore = PlayerBData.Score;
+
+	if (!bSuddenDeath)
+	{
+		if (PlayerAScore > (PlayerBScore + (5 - PlayerBData.PenaltiesTaken)))
+		{
+			bEndMatch = true;
+			WinningPlayer = PlayerAData;
+		}
+		else if (PlayerBScore > (PlayerAScore + (5 - PlayerAData.PenaltiesTaken)))
+		{
+			bEndMatch = true;
+			WinningPlayer = PlayerBData;
+		}
+	}
+	else
+	{
+		if (PlayerAPenaltiesTaken == PlayerBPenaltiesTaken)
+		{
+			if (PlayerAScore > PlayerBScore)
+			{
+				bEndMatch = true;
+				WinningPlayer = PlayerAData;
+			}
+			else if (PlayerBScore > PlayerAScore)
+			{
+				bEndMatch = true;
+				WinningPlayer = PlayerBData;
+			}
+		}
+	}
+	
+	if (bEndMatch)
+	{
+		EndMatch();
+	}
+	else
+	{
+		if (bSuddenDeath && !bEndMatch && PlayerAPenaltiesTaken % 5 == 0 && PlayerBPenaltiesTaken % 5 == 0)
+		{
+			HUDClearScoreImages();
+		}
+		
+		FlipPlayerNames();
+
+		if (!IsValid(MatchBall) || !IsValid(MatchAttacker) || !IsValid(MatchGoalkeeper))
+		{
+			return;
+		}
+
+		MatchBall->ResetToStart();
+		MatchAttacker->ResetToStart();
+		MatchGoalkeeper->ResetToStart();
+		
+		bRoundDecided = false;
+		CurrentMatchStateIndex = 0;
+	}
+}
+
+void AFromTheSpotGameModeBase::FlipPlayerNames()
+{
+	if (AttackingPlayerName == PlayerAData.Name)
+	{
+		AttackingPlayerName = PlayerBData.Name;
+	}
+	else if (AttackingPlayerName == PlayerBData.Name)
+	{
+		AttackingPlayerName = PlayerAData.Name;
+	}
+
+	HUDFlipPlayerNames();
 }
 
 void AFromTheSpotGameModeBase::HUDMatchStateStarted(const EMatchState NewMatchState)
@@ -455,4 +563,14 @@ void AFromTheSpotGameModeBase::HUDUpdateMatchData(const FPlayerData& NewPlayerAD
 	}
 
 	PlayerMatchHUD->UpdateMatchData(NewPlayerAData, NewPlayerBData);
+}
+
+void AFromTheSpotGameModeBase::HUDClearScoreImages()
+{
+	if (!IsValid(PlayerMatchHUD))
+	{
+		return;
+	}
+
+	PlayerMatchHUD->ClearScoreImages();
 }

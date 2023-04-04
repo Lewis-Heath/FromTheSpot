@@ -22,7 +22,7 @@ AFootball::AFootball()
 	FootballMesh->SetupAttachment(Root);
 }
 
-void AFootball::ResetToSpot()
+void AFootball::ResetToStart()
 {
 	// Check the football mesh is valid
 	if (!IsValid(FootballMesh))

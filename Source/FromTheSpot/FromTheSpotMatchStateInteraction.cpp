@@ -3,16 +3,16 @@
 #include "FromTheSpotMatchStateInteraction.h"
 
 #include "FromTheSpotGameModeBase.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 UFromTheSpotMatchStateInteraction::UFromTheSpotMatchStateInteraction()
 {
 	MatchStateType = EMatchState::INTERACTION;
-	bTimerActive = false;
 }
 
 void UFromTheSpotMatchStateInteraction::StartMatchState()
 {
-	Super::StartMatchState();
+	bTimerActive = false;
 
 	const UWorld* World = GetWorld();
 	if (!IsValid(World))
@@ -31,6 +31,8 @@ void UFromTheSpotMatchStateInteraction::TickMatchState(const float DeltaTime)
 
 void UFromTheSpotMatchStateInteraction::EndMatchState()
 {
+	UKismetSystemLibrary::K2_ClearAndInvalidateTimerHandle(this, WhistleTimerHandle);
+	UKismetSystemLibrary::K2_ClearAndInvalidateTimerHandle(this, KickBallTimerHandle);
 	Super::EndMatchState();
 }
 

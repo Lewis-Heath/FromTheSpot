@@ -95,6 +95,7 @@ enum class EMatchState : uint8
 	ATTACK,
 	DEFEND,
 	INTERACTION,
+	RESULTS,
 };
 
 UENUM(BlueprintType)
@@ -248,6 +249,9 @@ struct FPlayerData
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int Score = 0;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int PenaltiesTaken = 0;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	FString TeamName = "";

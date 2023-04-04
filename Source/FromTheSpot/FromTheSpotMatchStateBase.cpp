@@ -9,7 +9,7 @@ UFromTheSpotMatchStateBase::UFromTheSpotMatchStateBase()
 
 void UFromTheSpotMatchStateBase::StartMatchState()
 {
-	
+	bTimerActive = true;
 }
 
 void UFromTheSpotMatchStateBase::TickMatchState(const float DeltaTime)
@@ -22,7 +22,8 @@ void UFromTheSpotMatchStateBase::TickMatchState(const float DeltaTime)
 
 void UFromTheSpotMatchStateBase::EndMatchState()
 {
-	
+	CurrentTimeInProgress = 0.0f;
+	bTimerActive = false;
 }
 
 void UFromTheSpotMatchStateBase::SetGameModeReference(AFromTheSpotGameModeBase* NewGameModeReference)

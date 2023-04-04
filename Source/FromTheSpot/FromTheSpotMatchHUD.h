@@ -30,6 +30,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_PenaltyResult(const bool bScored, const FString& PlayerName);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_ClearScoreImages();
+
 	float GetTimingMultiplier() const;
 
 protected:

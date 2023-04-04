@@ -38,5 +38,5 @@ protected:
 	float MaxTimeInProgress = -1.0f;
 	float CurrentTimeInProgress = 0.0f;
 
-	bool bTimerActive = true;
+	bool bTimerActive = false;
 };

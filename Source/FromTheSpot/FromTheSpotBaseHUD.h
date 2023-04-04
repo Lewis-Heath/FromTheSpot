@@ -35,6 +35,9 @@ public:
 	//
 	virtual float GetTimingMultiplier() const;
 
+	//
+	virtual void ClearScoreImages();
+
 protected:
 	//
 	UPROPERTY(BlueprintReadWrite)

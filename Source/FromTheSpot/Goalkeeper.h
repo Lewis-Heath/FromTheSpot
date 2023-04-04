@@ -13,4 +13,7 @@ class FROMTHESPOT_API AGoalkeeper : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AGoalkeeper();
+
+	UFUNCTION(BlueprintCallable)
+	void ResetToStart();
 };

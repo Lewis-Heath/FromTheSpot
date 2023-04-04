@@ -18,6 +18,9 @@ public:
 	// Sets default values for this actor's properties
 	AFromTheSpotCharacter();
 
+	UFUNCTION(BlueprintCallable)
+	void ResetToStart();
+
 	//
 	UFUNCTION(BlueprintCallable)
 	void SetCurrentTurn(const ETurnType NewTurnType);
