@@ -8,6 +8,7 @@
 
 class USpringArmComponent;
 class UCameraComponent;
+class AGoalkeeper;
 
 UCLASS(config=Game)
 class AFromTheSpotCharacter : public ACharacter
@@ -20,6 +21,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ResetToStart();
+
+	void BeginPlay() override;
 
 	//
 	UFUNCTION(BlueprintCallable)
@@ -80,5 +83,8 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	FVector PreviousLocation = FVector::ZeroVector;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	AGoalkeeper* MatchGoalkeeper = nullptr;
 };
 

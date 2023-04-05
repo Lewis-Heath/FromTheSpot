@@ -31,6 +31,21 @@ void AFromTheSpotCharacter::ResetToStart()
 	
 }
 
+void AFromTheSpotCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	TArray<AActor*> FoundGoalkeepers;
+	UGameplayStatics::GetAllActorsOfClass(this, AGoalkeeper::StaticClass(), FoundGoalkeepers);
+
+	if (!FoundGoalkeepers.IsValidIndex(0))
+	{
+		return;
+	}
+
+	MatchGoalkeeper = Cast<AGoalkeeper>(FoundGoalkeepers[0]);
+}
+
 void AFromTheSpotCharacter::SetCurrentTurn(const ETurnType NewTurnType)
 {
 	CurrentTurn = NewTurnType;
@@ -163,6 +178,7 @@ void AFromTheSpotCharacter::TouchReleased(const FVector& ScreenLocation)
 	}
 
 	TArray<AActor*> ActorsToIgnore;
+	ActorsToIgnore.Add(MatchGoalkeeper);
 	FHitResult OutHitResult = FHitResult();
 
 	UKismetSystemLibrary::LineTraceSingle(this, WorldLocation, WorldLocation + (WorldDirection * 10000.0f), ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore, EDrawDebugTrace::Type::None, OutHitResult, true);
@@ -188,23 +204,9 @@ void AFromTheSpotCharacter::TouchReleased(const FVector& ScreenLocation)
 	AFootballGoal* FootballGoal = Cast<AFootballGoal>(HitActor);
 	if (!IsValid(FootballGoal))
 	{
-		bool bIncorrectFinish = true;
-		
-		if (CurrentTurn == ETurnType::ATTACK)
-		{
-			AGoalkeeper* Goalkeeper = Cast<AGoalkeeper>(HitActor);
-			if (IsValid(Goalkeeper))
-			{
-				bIncorrectFinish = false;
-			}
-		}
-
-		if (bIncorrectFinish)
-		{
-			PlayerMatchHUD->FreezeIndicator(false);
-			bCorrectStart = false;
-			return;
-		}
+		PlayerMatchHUD->FreezeIndicator(false);
+		bCorrectStart = false;
+		return;
 	}
 
 	AFromTheSpotGameModeBase* GameMode = Cast<AFromTheSpotGameModeBase>(UGameplayStatics::GetGameMode(this));
