@@ -5,7 +5,6 @@
 #include "Football.h"
 #include "FromTheSpotBaseHUD.h"
 #include "FromTheSpotCharacter.h"
-#include "FromTheSpotGameInstance.h"
 #include "FromTheSpotMatchStateAttack.h"
 #include "FromTheSpotMatchStateCoinFlip.h"
 #include "FromTheSpotMatchStateDefend.h"
@@ -263,6 +262,7 @@ void AFromTheSpotGameModeBase::EndMatch()
 {
 	const FMatchStateData& ResultsMatchStateData = MatchStateInfo[MatchStateInfo.Num()-1];
 	StartMatchState(ResultsMatchStateData);
+	HUDUpdateMatchData(PlayerAData, PlayerBData);
 }
 
 void AFromTheSpotGameModeBase::CoinFlipDecided(const ECoinFlipResult CoinFlipResult, bool bFlipPlayers)
