@@ -11,6 +11,7 @@ class AFromTheSpotBaseHUD;
 class AFootball;
 class AFromTheSpotCharacter;
 class AGoalkeeper;
+class AFootballGoal;
 
 UCLASS()
 class FROMTHESPOT_API AFromTheSpotGameModeBase : public AGameModeBase
@@ -44,6 +45,7 @@ public:
 
 	virtual void BlowWhistle();
 
+	UFUNCTION(BlueprintCallable)
 	virtual void TakePenalty();
 
 	UFUNCTION(BlueprintCallable)
@@ -82,6 +84,9 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 	AGoalkeeper* MatchGoalkeeper = nullptr;
+
+	UPROPERTY(BlueprintReadOnly)
+	AFootballGoal* MatchGoal = nullptr;
 
 	int CurrentMatchStateIndex = 0;
 	

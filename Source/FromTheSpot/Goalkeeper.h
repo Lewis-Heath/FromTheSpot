@@ -2,6 +2,7 @@
 
 #pragma once
 #include "CoreMinimal.h"
+#include "FromTheSpotDataTypes.h"
 #include "GameFramework/Actor.h"
 #include "Goalkeeper.generated.h"
 
@@ -16,4 +17,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ResetToStart();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_Dive(const FDivePointInfo& DiveInfo);
 };

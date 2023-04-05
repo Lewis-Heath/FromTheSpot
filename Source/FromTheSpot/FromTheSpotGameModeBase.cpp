@@ -3,6 +3,7 @@
 #include "FromTheSpotGameModeBase.h"
 
 #include "Football.h"
+#include "FootballGoal.h"
 #include "FromTheSpotBaseHUD.h"
 #include "FromTheSpotCharacter.h"
 #include "FromTheSpotMatchStateAttack.h"
@@ -63,6 +64,20 @@ void AFromTheSpotGameModeBase::BeginPlay()
 
 	MatchGoalkeeper = Cast<AGoalkeeper>(FoundGoalkeepers[0]);
 	if (!IsValid(MatchGoalkeeper))
+	{
+		return;
+	}
+
+	TArray<AActor*> FoundGoals;
+	UGameplayStatics::GetAllActorsOfClass(this, AFootballGoal::StaticClass(), FoundGoals);
+
+	if (!FoundGoals.IsValidIndex(0))
+	{
+		return;
+	}
+
+	MatchGoal = Cast<AFootballGoal>(FoundGoals[0]);
+	if (!IsValid(MatchGoal))
 	{
 		return;
 	}
@@ -344,13 +359,16 @@ void AFromTheSpotGameModeBase::BlowWhistle()
 	}
 
 	MatchAttacker->TakePenalty();
-
-	// tell attacker to play animation too
 }
 
 void AFromTheSpotGameModeBase::TakePenalty()
 {
 	if (!IsValid(MatchBall))
+	{
+		return;
+	}
+
+	if (!IsValid(MatchGoal))
 	{
 		return;
 	}
@@ -361,10 +379,14 @@ void AFromTheSpotGameModeBase::TakePenalty()
 		return;
 	}
 
+	const FDivePointInfo DivePointInfo = MatchGoal->GetDiveInfo(SaveLocation);
+
+	MatchGoalkeeper->BP_Dive(DivePointInfo);
+
 	MatchBall->Shoot(ShotLocation, TimingMultiplier);
 
 	World->GetTimerManager().SetTimer(PenaltyMissedTimerHandle, this, &AFromTheSpotGameModeBase::GoalMissed, MaxPenaltyShotTime);
-
+	
 	// tell goalkeeper to dive
 }
 

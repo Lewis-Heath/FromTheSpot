@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FromTheSpotDataTypes.h"
 #include "GameFramework/Actor.h"
 #include "FootballGoal.generated.h"
 
@@ -14,4 +15,13 @@ class FROMTHESPOT_API AFootballGoal : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AFootballGoal();
+
+	//
+	UFUNCTION(BlueprintCallable)
+	FDivePointInfo GetDiveInfo(const FVector& TargetLocation) const;
+
+protected:
+	//
+	UPROPERTY(BlueprintReadWrite)
+	TArray<FDivePointInfo> DivePoints;
 };

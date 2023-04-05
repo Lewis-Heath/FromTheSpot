@@ -21,7 +21,6 @@ void UFromTheSpotMatchStateInteraction::StartMatchState()
 	}
 
 	World->GetTimerManager().SetTimer(WhistleTimerHandle, this, &UFromTheSpotMatchStateInteraction::BlowWhistle, WhistleTime);
-	World->GetTimerManager().SetTimer(KickBallTimerHandle, this, &UFromTheSpotMatchStateInteraction::TakePenalty, KickBallTime);
 }
 
 void UFromTheSpotMatchStateInteraction::TickMatchState(const float DeltaTime)
@@ -32,7 +31,6 @@ void UFromTheSpotMatchStateInteraction::TickMatchState(const float DeltaTime)
 void UFromTheSpotMatchStateInteraction::EndMatchState()
 {
 	UKismetSystemLibrary::K2_ClearAndInvalidateTimerHandle(this, WhistleTimerHandle);
-	UKismetSystemLibrary::K2_ClearAndInvalidateTimerHandle(this, KickBallTimerHandle);
 	Super::EndMatchState();
 }
 
@@ -44,14 +42,4 @@ void UFromTheSpotMatchStateInteraction::BlowWhistle()
 	}
 
 	GameModeReference->BlowWhistle();
-}
-
-void UFromTheSpotMatchStateInteraction::TakePenalty()
-{
-	if (!IsValid(GameModeReference))
-	{
-		return;
-	}
-
-	GameModeReference->TakePenalty();
 }

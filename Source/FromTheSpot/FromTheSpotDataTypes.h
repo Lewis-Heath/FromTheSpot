@@ -114,6 +114,27 @@ enum class ETurnType : uint8
 	DEFEND,
 };
 
+UENUM(BlueprintType)
+enum class EGoalLocation : uint8
+{
+	NONE,
+	FAR_TOP_LEFT,
+	FAR_MIDDLE_LEFT,
+	FAR_BOTTOM_LEFT,
+	MID_TOP_LEFT,
+	MID_MIDDLE_LEFT,
+	MID_BOTTOM_LEFT,
+	MIDDLE_TOP,
+	MIDDLE_MIDDLE,
+	MIDDLE_BOTTOM,
+	FAR_TOP_RIGHT,
+	FAR_MIDDLE_RIGHT,
+	FAR_BOTTOM_RIGHT,
+	MID_TOP_RIGHT,
+	MID_MIDDLE_RIGHT,
+	MID_BOTTOM_RIGHT,
+};
+
 USTRUCT(BlueprintType)
 struct FShopItemData
 {
@@ -263,6 +284,17 @@ struct FPlayerData
 	EDifficulty Difficulty = EDifficulty::NONE;
 };
 
+USTRUCT(BlueprintType)
+struct FDivePointInfo
+{
+	GENERATED_BODY()
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	EGoalLocation GoalLocationType = EGoalLocation::NONE;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	USceneComponent* TargetPoint = nullptr;
+};
 
 
 

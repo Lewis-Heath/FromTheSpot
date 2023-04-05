@@ -213,7 +213,7 @@ void AFromTheSpotCharacter::TouchReleased(const FVector& ScreenLocation)
 		return;
 	}
 	
-	PreviousLocation = FVector::ZeroVector;
+	PreviousLocation = WorldLocation;
 	bTurnTaken = true;
 
 	switch (CurrentTurn)

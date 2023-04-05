@@ -21,12 +21,7 @@ public:
 	
 protected:
 	virtual void BlowWhistle();
-
-	virtual void TakePenalty();
 	
 	FTimerHandle WhistleTimerHandle;
 	float WhistleTime = 1.0f;
-
-	FTimerHandle KickBallTimerHandle;
-	float KickBallTime = 2.5f;
 };
