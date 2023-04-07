@@ -19,5 +19,5 @@ public:
 	void ResetToStart();
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void BP_Dive(const FDivePointInfo& DiveInfo);
+	void BP_Dive(const FDivePointInfo& DiveInfo, const float TimingMultiplier);
 };

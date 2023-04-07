@@ -20,8 +20,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FDivePointInfo GetDiveInfo(const FVector& TargetLocation) const;
 
+	//
+	UFUNCTION(BlueprintCallable)
+	FVector GetRandomBadShotLocation() const;
+
 protected:
 	//
 	UPROPERTY(BlueprintReadWrite)
 	TArray<FDivePointInfo> DivePoints;
+
+	//
+	UPROPERTY(BlueprintReadWrite)
+	TArray<USceneComponent*> BadShotPoints;
 };

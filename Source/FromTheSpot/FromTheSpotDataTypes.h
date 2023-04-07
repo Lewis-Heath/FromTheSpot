@@ -302,5 +302,23 @@ struct FDivePointInfo
 	USceneComponent* TargetPoint = nullptr;
 };
 
+USTRUCT(BlueprintType)
+struct FDiveAnimationInfo
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UAnimMontage* Animation = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	float Speed = 1.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	float GloveRadius = 32.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	float CatchProbability = 0.5f;
+};
+
 
 

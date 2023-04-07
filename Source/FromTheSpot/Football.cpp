@@ -8,18 +8,6 @@ AFootball::AFootball()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	// Create the root
-	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
-	
-	if (!IsValid(Root))
-	{
-		return;
-	}
-
-	// Create the mesh
-	FootballMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FootballMesh"));
-	FootballMesh->SetupAttachment(Root);
 }
 
 void AFootball::ResetToStart()
@@ -34,6 +22,9 @@ void AFootball::ResetToStart()
 	FootballMesh->SetSimulatePhysics(false);
 	FootballMesh->SetWorldLocation(StartingLocation);
 	FootballMesh->SetSimulatePhysics(true);
+
+	FootballMesh->SetVisibility(true);
+	FootballMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 }
 
 void AFootball::Shoot(const FVector& TargetLocation, const float TimingMultiplier)
@@ -45,7 +36,12 @@ void AFootball::Shoot(const FVector& TargetLocation, const float TimingMultiplie
 	}
 	
 	// Calculate the final power multiplier
-	const float FinalPowerMultiplier = TimingMultiplier * PowerMultiplier;
+	float FinalPowerMultiplier = TimingMultiplier * PowerMultiplier;
+
+	if (TimingMultiplier < 0.2f)
+	{
+		FinalPowerMultiplier = PowerMultiplier * 1.5f;
+	}
 
 	// Calculate the impulse force to be applied
 	const FVector ImpulseForce = UKismetMathLibrary::GetDirectionUnitVector(GetActorLocation(), TargetLocation) * FinalPowerMultiplier;

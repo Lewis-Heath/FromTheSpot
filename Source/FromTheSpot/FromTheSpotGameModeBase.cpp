@@ -380,14 +380,19 @@ void AFromTheSpotGameModeBase::TakePenalty()
 	}
 
 	const FDivePointInfo DivePointInfo = MatchGoal->GetDiveInfo(SaveLocation);
+	
+	MatchGoalkeeper->BP_Dive(DivePointInfo, TimingMultiplier);
 
-	MatchGoalkeeper->BP_Dive(DivePointInfo);
-
-	MatchBall->Shoot(ShotLocation, TimingMultiplier);
+	FVector FinalShotLocation = ShotLocation;
+	
+	if (TimingMultiplier <= 0.2f)
+	{
+		FinalShotLocation = MatchGoal->GetRandomBadShotLocation();
+	}
+	
+	MatchBall->Shoot(FinalShotLocation, TimingMultiplier);
 
 	World->GetTimerManager().SetTimer(PenaltyMissedTimerHandle, this, &AFromTheSpotGameModeBase::GoalMissed, MaxPenaltyShotTime);
-	
-	// tell goalkeeper to dive
 }
 
 void AFromTheSpotGameModeBase::GoalScored()

@@ -27,4 +27,27 @@ FDivePointInfo AFootballGoal::GetDiveInfo(const FVector& TargetLocation) const
 	return ClosestDiveInfo;
 }
 
+FVector AFootballGoal::GetRandomBadShotLocation() const
+{
+	FVector RandomLocation = FVector::ZeroVector;
+	
+	const int RandomIndex = UKismetMathLibrary::RandomIntegerInRange(0, BadShotPoints.Num()-1);
+
+	if (!BadShotPoints.IsValidIndex(RandomIndex))
+	{
+		return RandomLocation;
+	}
+
+	const USceneComponent* RandomPoint = BadShotPoints[RandomIndex];
+
+	if (!IsValid(RandomPoint))
+	{
+		return RandomLocation;
+	}
+
+	RandomLocation = RandomPoint->GetComponentLocation();
+	return RandomLocation;
+}
+
+
 
