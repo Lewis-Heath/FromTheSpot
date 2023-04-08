@@ -15,9 +15,7 @@ public:
 	// Sets default values for this actor's properties
 	AGoalkeeper();
 
-	UFUNCTION(BlueprintCallable)
-	void ResetToStart();
-
+	// Blueprint event, plays the relevant dive animation
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_Dive(const FDivePointInfo& DiveInfo, const float TimingMultiplier);
 };

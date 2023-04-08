@@ -11,11 +11,6 @@ class FROMTHESPOT_API UFromTheSpotMatchStateAttack : public UFromTheSpotMatchSta
 	GENERATED_BODY()
 
 public:
+	// Sets default values for this objects properties
 	UFromTheSpotMatchStateAttack();
-
-	virtual void StartMatchState() override;
-
-	virtual void TickMatchState(const float DeltaTime) override;
-
-	virtual void EndMatchState() override;
 };

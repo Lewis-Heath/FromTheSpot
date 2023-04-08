@@ -8,8 +8,3 @@ AGoalkeeper::AGoalkeeper()
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-void AGoalkeeper::ResetToStart()
-{
-	
-}
-

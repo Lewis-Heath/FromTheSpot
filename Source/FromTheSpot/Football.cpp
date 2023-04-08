@@ -18,11 +18,14 @@ void AFootball::ResetToStart()
 		return;
 	}
 
+	// Reset the sound bools
+	bNetSoundPlayed = false;
+	bHittingGoalkeeperSoundPlayed = false;
+	
 	// Flip physics on and off for the ball and reset the actors position
 	FootballMesh->SetSimulatePhysics(false);
 	FootballMesh->SetWorldLocation(StartingLocation);
 	FootballMesh->SetSimulatePhysics(true);
-
 	FootballMesh->SetVisibility(true);
 	FootballMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 }
@@ -38,9 +41,9 @@ void AFootball::Shoot(const FVector& TargetLocation, const float TimingMultiplie
 	// Calculate the final power multiplier
 	float FinalPowerMultiplier = TimingMultiplier * PowerMultiplier;
 
-	if (TimingMultiplier < 0.2f)
+	if (TimingMultiplier < 0.25f)
 	{
-		FinalPowerMultiplier = PowerMultiplier * 1.5f;
+		FinalPowerMultiplier = PowerMultiplier * 2.0f;
 	}
 
 	// Calculate the impulse force to be applied

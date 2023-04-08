@@ -23,8 +23,23 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FMatchData GetMatchData() const;
 
+	//
+	UFUNCTION(BlueprintCallable)
+	void SetMatchVolumes(const TArray<float>& NewMatchVolumes);
+
+	//
+	UFUNCTION(BlueprintCallable)
+	TArray<float> GetMatchVolumes() const;
+
+	UFUNCTION(BlueprintCallable)
+	float GetVolumeMultiplier(const int TypeIndex) const;
+
 protected:
 	//
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FMatchData MatchData = FMatchData();
+
+	//
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<float> MatchVolumes;
 };

@@ -11,17 +11,22 @@ class FROMTHESPOT_API UFromTheSpotMatchStateInteraction : public UFromTheSpotMat
 	GENERATED_BODY()
 
 public:
+	// Sets default values for this objects properties
 	UFromTheSpotMatchStateInteraction();
 
+	// Called when the match state is started
 	virtual void StartMatchState() override;
 
-	virtual void TickMatchState(const float DeltaTime) override;
-
+	// Called when the match state is ended
 	virtual void EndMatchState() override;
 	
 protected:
+	// Tells the game mode to start the penalty
 	virtual void BlowWhistle();
-	
+
+	// Timer for the penalty start
 	FTimerHandle WhistleTimerHandle;
+
+	// Timer amount
 	float WhistleTime = 1.0f;
 };

@@ -5,6 +5,7 @@
 
 void AFromTheSpotBaseHUD::MatchStateStarted(const EMatchState NewMatchState)
 {
+	// Check the match hud is valid
 	if (!IsValid(MatchHUD))
 	{
 		return;
@@ -16,6 +17,7 @@ void AFromTheSpotBaseHUD::MatchStateStarted(const EMatchState NewMatchState)
 void AFromTheSpotBaseHUD::CoinFlipDecided(const bool bPlayer1Heads, const bool bPlayer2Heads,
                                           const ECoinFlipResult CoinFlipResult, const FString& StartingPlayerName)
 {
+	// Check the match hud is valid
 	if (!IsValid(MatchHUD))
 	{
 		return;
@@ -26,6 +28,7 @@ void AFromTheSpotBaseHUD::CoinFlipDecided(const bool bPlayer1Heads, const bool b
 
 void AFromTheSpotBaseHUD::FlipPlayerNames()
 {
+	// Check the match hud is valid
 	if (!IsValid(MatchHUD))
 	{
 		return;
@@ -36,6 +39,7 @@ void AFromTheSpotBaseHUD::FlipPlayerNames()
 
 void AFromTheSpotBaseHUD::UpdateMatchData(const FPlayerData& PlayerAData, const FPlayerData& PlayerBData)
 {
+	// Check the match hud is valid
 	if (!IsValid(MatchHUD))
 	{
 		return;
@@ -46,6 +50,7 @@ void AFromTheSpotBaseHUD::UpdateMatchData(const FPlayerData& PlayerAData, const 
 
 void AFromTheSpotBaseHUD::FreezeIndicator(bool bFreeze)
 {
+	// Check the match hud is valid
 	if (!IsValid(MatchHUD))
 	{
 		return;
@@ -56,6 +61,7 @@ void AFromTheSpotBaseHUD::FreezeIndicator(bool bFreeze)
 
 void AFromTheSpotBaseHUD::PenaltyResult(const bool bScored, const FString& PlayerName)
 {
+	// Check the match hud is valid
 	if (!IsValid(MatchHUD))
 	{
 		return;
@@ -66,6 +72,7 @@ void AFromTheSpotBaseHUD::PenaltyResult(const bool bScored, const FString& Playe
 
 float AFromTheSpotBaseHUD::GetTimingMultiplier() const
 {
+	// Check the match hud is valid
 	if (!IsValid(MatchHUD))
 	{
 		return 0.0f;
@@ -76,6 +83,7 @@ float AFromTheSpotBaseHUD::GetTimingMultiplier() const
 
 void AFromTheSpotBaseHUD::ClearScoreImages()
 {
+	// Check the match hud is valid
 	if (!IsValid(MatchHUD))
 	{
 		return;

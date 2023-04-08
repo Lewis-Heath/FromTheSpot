@@ -40,4 +40,12 @@ protected:
 	// The power multiplier for the force added to the football when kicked
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	float PowerMultiplier = 1750.0f;
+
+	// Has the net sound been played on this round
+	UPROPERTY(BlueprintReadWrite)
+	bool bNetSoundPlayed = false;
+
+	// Has the hitting goalkeeper sound been played on this round
+	UPROPERTY(BlueprintReadWrite)
+	bool bHittingGoalkeeperSoundPlayed = false;
 };

@@ -12,30 +12,30 @@ UFromTheSpotMatchStateInteraction::UFromTheSpotMatchStateInteraction()
 
 void UFromTheSpotMatchStateInteraction::StartMatchState()
 {
+	// Set the timer off by default
 	bTimerActive = false;
 
+	// Grab the world check its valid
 	const UWorld* World = GetWorld();
 	if (!IsValid(World))
 	{
 		return;
 	}
 
+	// Set a whistle timer
 	World->GetTimerManager().SetTimer(WhistleTimerHandle, this, &UFromTheSpotMatchStateInteraction::BlowWhistle, WhistleTime);
-}
-
-void UFromTheSpotMatchStateInteraction::TickMatchState(const float DeltaTime)
-{
-	Super::TickMatchState(DeltaTime);
 }
 
 void UFromTheSpotMatchStateInteraction::EndMatchState()
 {
+	// Clear the whistle timer
 	UKismetSystemLibrary::K2_ClearAndInvalidateTimerHandle(this, WhistleTimerHandle);
 	Super::EndMatchState();
 }
 
 void UFromTheSpotMatchStateInteraction::BlowWhistle()
 {
+	// Check the game mode is valid
 	if (!IsValid(GameModeReference))
 	{
 		return;
