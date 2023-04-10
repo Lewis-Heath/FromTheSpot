@@ -67,7 +67,10 @@ void UFromTheSpotMatchStateCoinFlip::TickMatchState(const float DeltaTime)
 		
 		PlayerAData.TeamName = PlayerATeamName;
 		PlayerAData.TeamBadge = MatchData.Player1TeamData.Badge;
-		PlayerAData.Difficulty = MatchData.Player1Difficulty;
+		PlayerAData.TeamType = MatchData.Player1TeamData.TeamType;
+		PlayerAData.BootsType = MatchData.Player1Boots;
+		PlayerAData.GlovesType = MatchData.Player1Gloves;
+		PlayerAData.Difficulty = MatchData.Player1Difficulty; 
 
 		// Set player B data up
 		FString PlayerBTeamName = "White Team";
@@ -90,6 +93,9 @@ void UFromTheSpotMatchStateCoinFlip::TickMatchState(const float DeltaTime)
 		
 		PlayerBData.TeamName = PlayerBTeamName;
 		PlayerBData.TeamBadge = MatchData.Player2TeamData.Badge;
+		PlayerBData.TeamType = MatchData.Player2TeamData.TeamType;
+		PlayerBData.BootsType = MatchData.Player2Boots;
+		PlayerBData.GlovesType = MatchData.Player2Gloves;
 		PlayerBData.Difficulty = MatchData.Player2Difficulty;
 
 		// Update the game mode

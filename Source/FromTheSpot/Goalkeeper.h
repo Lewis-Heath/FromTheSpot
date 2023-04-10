@@ -18,4 +18,8 @@ public:
 	// Blueprint event, plays the relevant dive animation
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_Dive(const FDivePointInfo& DiveInfo, const float TimingMultiplier);
+
+	// Updates the material on the goalkeeper
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void BP_UpdateMaterial(const EGlovesType NewGlovesType);
 };

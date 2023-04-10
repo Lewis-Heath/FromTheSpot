@@ -390,6 +390,8 @@ void AFromTheSpotGameModeBase::UpdateMatchData(const FPlayerData& NewPlayerAData
 	PlayerAData = NewPlayerAData;
 	PlayerBData = NewPlayerBData;
 	HUDUpdateMatchData(PlayerAData, PlayerBData);
+
+	UpdateMatchMaterials();
 }
 
 void AFromTheSpotGameModeBase::SetAttackInformation(const FVector NewShotLocation, const float NewTimingMultiplier)
@@ -661,6 +663,38 @@ void AFromTheSpotGameModeBase::FlipPlayerNames()
 
 	// Updates the hud
 	HUDFlipPlayerNames();
+
+	// Update the materials
+	UpdateMatchMaterials();
+}
+
+void AFromTheSpotGameModeBase::UpdateMatchMaterials()
+{
+	// Check the goalkeeper is valid
+	if (!IsValid(MatchGoalkeeper))
+	{
+		return;
+	}
+
+	// Check the attacker is valid
+	if (!IsValid(MatchAttacker))
+	{
+		return;
+	}
+
+	// Work out who's attacking
+	if (AttackingPlayerName == PlayerAData.Name)
+	{
+		// Player A attacking, player B defending
+		MatchAttacker->BP_UpdateMaterial(PlayerAData.TeamType, PlayerAData.BootsType);
+		MatchGoalkeeper->BP_UpdateMaterial(PlayerBData.GlovesType);
+	}
+	else
+	{
+		// Player B attacking, player A attacking
+		MatchAttacker->BP_UpdateMaterial(PlayerBData.TeamType, PlayerBData.BootsType);
+		MatchGoalkeeper->BP_UpdateMaterial(PlayerAData.GlovesType);
+	}
 }
 
 EGameModeType AFromTheSpotGameModeBase::GetGameModeType() const

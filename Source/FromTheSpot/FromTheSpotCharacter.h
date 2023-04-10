@@ -30,6 +30,10 @@ public:
 	// Blueprint event, called when the character should take the penalty
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_TakePenalty();
+
+	// Updates the material on the attacker
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void BP_UpdateMaterial(const ETeamType NewTeamType, const EBootsType NewBootsType);
 	
 	// Returns CameraBoom subobject
 	USpringArmComponent* GetCameraBoom() const;

@@ -287,6 +287,15 @@ struct FPlayerData
 	UTexture2D* TeamBadge = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	ETeamType TeamType = ETeamType::GREY;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	EBootsType BootsType = EBootsType::GREY;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	EGlovesType GlovesType = EGlovesType::GREY;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	EDifficulty Difficulty = EDifficulty::NONE;
 };
 

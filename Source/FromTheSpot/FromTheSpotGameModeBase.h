@@ -73,6 +73,9 @@ public:
 	// Flips the attacking player name round
 	virtual void FlipPlayerNames();
 
+	// Sets the correct materials for this turn
+	virtual void UpdateMatchMaterials();
+
 	// Returns the current game mode type
 	UFUNCTION(BlueprintCallable)
 	virtual EGameModeType GetGameModeType() const;
