@@ -20,6 +20,9 @@ AFromTheSpotGameModeBase::AFromTheSpotGameModeBase()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	// Set the default game mode type to classic
+	GameModeType = EGameModeType::CLASSIC;
 }
 
 void AFromTheSpotGameModeBase::BeginPlay()
@@ -399,6 +402,11 @@ void AFromTheSpotGameModeBase::SetAttackInformation(const FVector NewShotLocatio
 	StartNextMatchState();
 }
 
+FVector AFromTheSpotGameModeBase::GetShotLocation() const
+{
+	return ShotLocation;
+}
+
 void AFromTheSpotGameModeBase::SetDefendInformation(const FVector NewSaveLocation)
 {
 	// Updates the data
@@ -653,6 +661,11 @@ void AFromTheSpotGameModeBase::FlipPlayerNames()
 
 	// Updates the hud
 	HUDFlipPlayerNames();
+}
+
+EGameModeType AFromTheSpotGameModeBase::GetGameModeType() const
+{
+	return GameModeType;
 }
 
 void AFromTheSpotGameModeBase::HUDMatchStateStarted(const EMatchState NewMatchState)

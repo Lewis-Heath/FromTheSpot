@@ -74,6 +74,14 @@ void UFromTheSpotMatchStateCoinFlip::TickMatchState(const float DeltaTime)
 		FPlayerData PlayerBData = FPlayerData();
 		PlayerBData.Name = "Player 2";
 
+		const EGameModeType GameModeType = GameModeReference->GetGameModeType();
+		const bool bAgainstAI = GameModeType == EGameModeType::TUTORIAL || GameModeType == EGameModeType::PRACTICE;
+
+		if (bAgainstAI)
+		{
+			PlayerBData.Name = "AI";
+		}
+		
 		const FString PlayerBTeamDataName = MatchData.Player2TeamData.Name;
 		if (PlayerBTeamDataName.Len() > 0)
 		{

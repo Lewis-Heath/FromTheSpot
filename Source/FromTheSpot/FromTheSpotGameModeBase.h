@@ -44,6 +44,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void SetAttackInformation(const FVector NewShotLocation, const float NewTimingMultiplier);
 
+	// Returns the cached attack shot location
+	UFUNCTION(BlueprintCallable)
+	virtual FVector GetShotLocation() const;
+
 	// Sets the defend information for the defending turn
 	UFUNCTION(BlueprintCallable)
 	virtual void SetDefendInformation(const FVector NewSaveLocation);
@@ -68,6 +72,10 @@ public:
 
 	// Flips the attacking player name round
 	virtual void FlipPlayerNames();
+
+	// Returns the current game mode type
+	UFUNCTION(BlueprintCallable)
+	virtual EGameModeType GetGameModeType() const;
 
 	// Hud functions
 	virtual void HUDMatchStateStarted(const EMatchState NewMatchState);
@@ -140,4 +148,7 @@ protected:
 
 	// Is the match in sudden death
 	bool bSuddenDeath = false;
+
+	// The type of game mode
+	EGameModeType GameModeType = EGameModeType::NONE;
 };

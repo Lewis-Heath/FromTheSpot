@@ -21,6 +21,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FVector GetRandomBadShotLocation() const;
 
+	// Returns a random good shot location from the bad dive points array
+	UFUNCTION(BlueprintCallable)
+	FVector GetRandomGoodShotLocation() const;
+
 protected:
 	// Array holding the info for the different dive points 
 	UPROPERTY(BlueprintReadWrite)

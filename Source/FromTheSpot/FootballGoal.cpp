@@ -56,5 +56,33 @@ FVector AFootballGoal::GetRandomBadShotLocation() const
 	return RandomLocation;
 }
 
+FVector AFootballGoal::GetRandomGoodShotLocation() const
+{
+	// Set the default variable 
+	FVector RandomLocation = FVector::ZeroVector;
+
+	// Grab a random index within the arrays range
+	const int RandomIndex = UKismetMathLibrary::RandomIntegerInRange(0, DivePoints.Num()-1);
+
+	// Check the index is valid
+	if (!DivePoints.IsValidIndex(RandomIndex))
+	{
+		return RandomLocation;
+	}
+
+	// Get the random point scene component
+	const USceneComponent* RandomPoint = DivePoints[RandomIndex].TargetPoint;
+
+	// Check its valid
+	if (!IsValid(RandomPoint))
+	{
+		return RandomLocation;
+	}
+
+	// Set the random location and return it
+	RandomLocation = RandomPoint->GetComponentLocation();
+	return RandomLocation;
+}
+
 
 
