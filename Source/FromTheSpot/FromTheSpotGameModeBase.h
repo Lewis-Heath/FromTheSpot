@@ -80,6 +80,30 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual EGameModeType GetGameModeType() const;
 
+	// Increases the number of player goals scored by 1
+	UFUNCTION(BlueprintCallable)
+	void IncreasePlayerGoalsScored();
+
+	// Returns the number of player goals scored this match
+	UFUNCTION(BlueprintCallable)
+	int GetPlayerGoalsScored() const;
+
+	// Increases the number of player saves made by 1
+	UFUNCTION(BlueprintCallable)
+	void IncreasePlayerSavesMade();
+
+	// Returns the number of player saves made this match
+	UFUNCTION(BlueprintCallable)
+	int GetPlayerSavesMade() const;
+
+	// Sets if the penalty was saved
+	UFUNCTION(BlueprintCallable)
+	void PenaltySaved();
+
+	// Updates the saved data
+	UFUNCTION(BlueprintNativeEvent)
+	void UpdateEndMatchData();
+	
 	// Hud functions
 	virtual void HUDMatchStateStarted(const EMatchState NewMatchState);
 	virtual void HUDCoinFlipDecided(const bool bPlayer1Heads, const bool bPlayer2Heads, const ECoinFlipResult CoinFlipResult, const FString& StartingPlayerName);
@@ -123,6 +147,17 @@ protected:
 	// Reference to the match goal
 	UPROPERTY(BlueprintReadOnly)
 	AFootballGoal* MatchGoal = nullptr;
+
+	// Was the penalty saved
+	bool bPenaltySaved = false;
+
+	// The number of goals scored by players this match
+	UPROPERTY(BlueprintReadOnly)
+	int PlayerGoalsScored = 0;
+
+	// The number of saves made by players this match
+	UPROPERTY(BlueprintReadOnly)
+	int PlayerSavesMade = 0;
 
 	// The player data for this match
 	FPlayerData PlayerAData = FPlayerData();

@@ -14,6 +14,7 @@ enum class EMenuType : uint8
 	TEAM_SELECT,
 	PAUSE,
 	POST_MATCH,
+	CHALLENGES,
 };
 
 UENUM(BlueprintType)

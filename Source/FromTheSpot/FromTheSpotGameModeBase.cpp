@@ -28,7 +28,7 @@ AFromTheSpotGameModeBase::AFromTheSpotGameModeBase()
 void AFromTheSpotGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	// Grabs all the footballs in the scene
 	TArray<AActor*> FoundFootballs;
 	UGameplayStatics::GetAllActorsOfClass(this, AFootball::StaticClass(), FoundFootballs);
@@ -328,6 +328,9 @@ void AFromTheSpotGameModeBase::EndMatch()
 	const FMatchStateData& ResultsMatchStateData = MatchStateInfo[MatchStateInfo.Num()-1];
 	StartMatchState(ResultsMatchStateData);
 	HUDUpdateMatchData(PlayerAData, PlayerBData);
+
+	// Update saved data
+	UpdateEndMatchData();
 }
 
 void AFromTheSpotGameModeBase::CoinFlipDecided(const ECoinFlipResult CoinFlipResult, bool bFlipPlayers)
@@ -507,6 +510,16 @@ void AFromTheSpotGameModeBase::GoalScored()
 		PlayerBData.Score++;
 	}
 
+	// Check if its AI that has scored
+	if (AttackingPlayerName != "AI")
+	{
+		// Increase the number of player goals scored
+		IncreasePlayerGoalsScored();
+	}
+
+	// Reset penalty saved bool
+	bPenaltySaved = false;
+
 	// Invalidate the timer
 	UKismetSystemLibrary::K2_ClearAndInvalidateTimerHandle(this, PenaltyMissedTimerHandle);
 
@@ -550,6 +563,26 @@ void AFromTheSpotGameModeBase::GoalMissed()
 	{
 		PlayerBData.PenaltiesTaken++;
 	}
+
+	// Set default defending player name
+	FString DefendingPlayerName = PlayerAData.Name;
+
+	// If the names are the same
+	if (AttackingPlayerName == DefendingPlayerName)
+	{
+		// Swap the name to the other player
+		DefendingPlayerName = PlayerBData.Name;
+	}
+
+	// Check if its AI that has scored
+	if (DefendingPlayerName != "AI" && bPenaltySaved)
+	{
+		// Increase the number of player saves made
+		IncreasePlayerSavesMade();
+	}
+
+	// Reset penalty saved bool
+	bPenaltySaved = false;
 
 	// Invalidate the timer
 	UKismetSystemLibrary::K2_ClearAndInvalidateTimerHandle(this, PenaltyMissedTimerHandle);
@@ -700,6 +733,36 @@ void AFromTheSpotGameModeBase::UpdateMatchMaterials()
 EGameModeType AFromTheSpotGameModeBase::GetGameModeType() const
 {
 	return GameModeType;
+}
+
+void AFromTheSpotGameModeBase::IncreasePlayerGoalsScored()
+{
+	PlayerGoalsScored++;
+}
+
+int AFromTheSpotGameModeBase::GetPlayerGoalsScored() const
+{
+	return PlayerGoalsScored;
+}
+
+void AFromTheSpotGameModeBase::IncreasePlayerSavesMade()
+{
+	PlayerSavesMade++;
+}
+
+int AFromTheSpotGameModeBase::GetPlayerSavesMade() const
+{
+	return PlayerSavesMade;
+}
+
+void AFromTheSpotGameModeBase::PenaltySaved()
+{
+	bPenaltySaved = true;
+}
+
+void AFromTheSpotGameModeBase::UpdateEndMatchData_Implementation()
+{
+	
 }
 
 void AFromTheSpotGameModeBase::HUDMatchStateStarted(const EMatchState NewMatchState)
