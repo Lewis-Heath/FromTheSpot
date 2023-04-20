@@ -82,23 +82,15 @@ public:
 
 	// Increases the number of player goals scored by 1
 	UFUNCTION(BlueprintCallable)
-	void IncreasePlayerGoalsScored();
-
-	// Returns the number of player goals scored this match
-	UFUNCTION(BlueprintCallable)
-	int GetPlayerGoalsScored() const;
+	virtual void IncreasePlayerGoalsScored();
 
 	// Increases the number of player saves made by 1
 	UFUNCTION(BlueprintCallable)
-	void IncreasePlayerSavesMade();
-
-	// Returns the number of player saves made this match
-	UFUNCTION(BlueprintCallable)
-	int GetPlayerSavesMade() const;
+	virtual void IncreasePlayerSavesMade();
 
 	// Sets if the penalty was saved
 	UFUNCTION(BlueprintCallable)
-	void PenaltySaved();
+	virtual void PenaltySaved();
 
 	// Updates the saved data
 	UFUNCTION(BlueprintNativeEvent)

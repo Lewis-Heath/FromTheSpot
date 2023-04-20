@@ -740,19 +740,9 @@ void AFromTheSpotGameModeBase::IncreasePlayerGoalsScored()
 	PlayerGoalsScored++;
 }
 
-int AFromTheSpotGameModeBase::GetPlayerGoalsScored() const
-{
-	return PlayerGoalsScored;
-}
-
 void AFromTheSpotGameModeBase::IncreasePlayerSavesMade()
 {
 	PlayerSavesMade++;
-}
-
-int AFromTheSpotGameModeBase::GetPlayerSavesMade() const
-{
-	return PlayerSavesMade;
 }
 
 void AFromTheSpotGameModeBase::PenaltySaved()

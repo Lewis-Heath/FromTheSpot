@@ -34,12 +34,6 @@ public:
 	// Updates the material on the attacker
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void BP_UpdateMaterial(const ETeamType NewTeamType, const EBootsType NewBootsType);
-	
-	// Returns CameraBoom subobject
-	USpringArmComponent* GetCameraBoom() const;
-	
-	// Returns FollowCamera subobject
-	UCameraComponent* GetFollowCamera() const;
 
 protected:
 	// Called when the game starts or when spawned

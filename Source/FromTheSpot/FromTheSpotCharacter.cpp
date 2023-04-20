@@ -52,16 +52,6 @@ void AFromTheSpotCharacter::SetCurrentTurn(const ETurnType NewTurnType)
 	bCorrectStart = false;
 }
 
-USpringArmComponent* AFromTheSpotCharacter::GetCameraBoom() const
-{
-	return CameraBoom;
-}
-
-UCameraComponent* AFromTheSpotCharacter::GetFollowCamera() const
-{
-	return FollowCamera;
-}
-
 void AFromTheSpotCharacter::TouchPressed(const FVector& ScreenLocation)
 {
 	// Set finger down to true
